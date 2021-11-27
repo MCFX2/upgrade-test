@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     float blinkTimeLeft = 0f;
 
     SpriteRenderer m_sprite;
+    private Light localLight;
 
     public void Damage(int damage)
     {
@@ -46,6 +47,7 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         m_sprite = GetComponent<SpriteRenderer>();
+        localLight = GetComponent<Light>();
     }
 
     void Update()
@@ -57,12 +59,14 @@ public class PlayerHealth : MonoBehaviour
             if (blinkTimeLeft < 0)
             {
                 m_sprite.forceRenderingOff = !m_sprite.forceRenderingOff;
+                localLight.enabled = !localLight.enabled;
                 blinkTimeLeft += invBlinkTime;
             }
         }
         if (invTimeLeft < 0)
         {
             m_sprite.forceRenderingOff = false;
+            localLight.enabled = true;
             invTimeLeft = 0;
         }
     }
