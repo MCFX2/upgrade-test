@@ -8,12 +8,15 @@ public class BasicBulletSpawner : MonoBehaviour
     [SerializeField] Vector3 Offset = new Vector3(0, -1, 0);
 
     [SerializeField] float ShootInterval = 0.1f;
+	
+	private GameObject player = null;
 
     float timeSinceShot = 0f;
+	const float activateDistance = 30.0f;
 
     void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Start is called before the first frame update
@@ -23,7 +26,8 @@ public class BasicBulletSpawner : MonoBehaviour
         
         var newBullet = Instantiate(bulletType,
             transform.position,
-            transform.rotation);
+            transform.rotation,
+			transform.parent);
         
         newBullet.transform.Translate(Offset);
 
@@ -34,10 +38,13 @@ public class BasicBulletSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeSinceShot += Time.deltaTime;
-        if(timeSinceShot >= ShootInterval)
-        {
-            Shoot();
-        }
+		if(Vector3.Distance(transform.position, player.transform.position) < activateDistance)
+		{
+			timeSinceShot += Time.deltaTime;
+			if(timeSinceShot >= ShootInterval)
+			{
+				Shoot();
+			}
+		}
     }
 }
